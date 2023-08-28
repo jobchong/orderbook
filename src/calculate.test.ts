@@ -1,19 +1,16 @@
-import { calculateGlobalMidPrice } from '../src/calculate';
-import redisMock from 'redis-mock';
-import { promisify } from 'util';
-
-const client = redisMock.createClient();
-
-jest.mock('../src/redis', () => ({
-  client: client
-}));
+import { calculateGlobalMidPrice } from './calculate';
+import client from './redis';
+jest.mock('./redis');
 
 describe('calculateGlobalMidPrice', () => {
-  it('should calculate the average mid-price correctly', async () => {
-    const msetAsync = promisify(client.mSet).bind(client);
-    await msetAsync(['binance', '60000', 'kraken', '62000', 'huobi', '61000']);
-    
-    const globalMidPrice = await calculateGlobalMidPrice();
-    expect(globalMidPrice).toBe(61000);
+  it('should calculate average correctly', async () => {
+    (client.mGet as jest.Mock).mockResolvedValue(['100', '200', '300']);
+    const result = await calculateGlobalMidPrice();
+    expect(result).toBe(200);
+  });
+
+  it('should handle Redis failure', async () => {
+    (client.mGet as jest.Mock).mockRejectedValue(new Error('Redis Error'));
+    await expect(calculateGlobalMidPrice()).rejects.toThrow('Redis Error');
   });
 });

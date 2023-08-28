@@ -1,24 +1,14 @@
 import request from 'supertest';
-import express from 'express';
-import { calculateGlobalMidPrice } from '../src/calculate';
+import { app } from './index';
+import { calculateGlobalMidPrice } from './calculate';
 
-const app = express();
-
-jest.mock('../src/calculate');
-
-app.get('/btcusdt', async (req, res) => {
-  const globalMidPrice = await calculateGlobalMidPrice();
-  res.json({ globalMidPrice });
-});
+jest.mock('./calculate');
 
 describe('GET /btcusdt', () => {
-  it('should return the global mid-price', async () => {
-    const mockedCalc = jest.mocked(calculateGlobalMidPrice)
-    mockedCalc.mockResolvedValue(61000);
-
-    const response = await request(app).get('/btcusdt');
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ globalMidPrice: 61000 });
+  it('should return calculated globalMidPrice', async () => {
+    (calculateGlobalMidPrice as jest.Mock).mockResolvedValue(200);
+    const res = await request(app).get('/btcusdt');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ globalMidPrice: 200 });
   });
 });

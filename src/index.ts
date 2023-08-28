@@ -4,7 +4,7 @@ import { fetchBinanceOrderBook } from './exchanges/binance';
 import { fetchKrakenOrderBook } from './exchanges/kraken';
 import './exchanges/huobi';
 
-const app = express();
+export const app = express();
 const port = 3000;
 
 // Fetch order books periodically

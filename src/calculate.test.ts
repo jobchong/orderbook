@@ -1,5 +1,7 @@
 import { calculateGlobalMidPrice } from './calculate';
 import client from './redis';
+import { jest } from '@jest/globals'
+
 jest.mock('./redis');
 
 describe('calculateGlobalMidPrice', () => {

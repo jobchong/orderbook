@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from './index';
 import { calculateGlobalMidPrice } from './calculate';
+import { jest } from '@jest/globals'
 
 jest.mock('./calculate');
 

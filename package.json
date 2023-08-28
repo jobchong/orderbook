@@ -19,12 +19,29 @@
     "tsc": "^2.0.4",
     "typescript": "^5.2.2"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "preset": "ts-jest/presets/default-esm",
+    "testEnvironment": "node",
+    "testRegex": ".*.test.ts",
+    "transform": {
+      "^.+\\.ts?$": [
+	"ts-jest",
+	{
+	  "experimentalSpecifierResolution": "node",
+	  "useESM": true
+	}
+      ]
+    }
+  },
   "scripts": {
     "build": "tsc",
     "start-prod": "node dist/index.js",
     "start": "ts-node src/index.ts",
     "start-all": "npm run build && npm run start-prod",
-    "test": "jest --runInBand"
+    "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "type": "module"
 }

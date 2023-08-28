@@ -3,6 +3,11 @@ import { calculateGlobalMidPrice } from './calculate';
 import { fetchBinanceOrderBook } from './exchanges/binance';
 import { fetchKrakenOrderBook } from './exchanges/kraken';
 import './exchanges/huobi';
+import { connectClient } from './redis';
+
+(async () => {
+  await connectClient();
+})();
 
 export const app = express();
 const port = 3000;
